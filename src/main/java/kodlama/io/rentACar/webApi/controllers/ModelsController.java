@@ -22,14 +22,14 @@ import lombok.AllArgsConstructor;
 public class ModelsController {
 	private ModelService modelService;
 	  
-	@GetMapping() // data çekmek için kullanılır
+	@GetMapping()   // Tum modellerı lıstelemek icin HTTP GET istegı
 	public List<GetAllModelsResponse> getAll(){
 		return modelService.getAll();
 	    }
 
 
-@PostMapping() // eklemeler için kullanılır
-@ResponseStatus(code=HttpStatus.CREATED)
+@PostMapping()  // Yenı model eklemek ıcın HTTP POST ısteğı
+@ResponseStatus(code=HttpStatus.CREATED)  // Başarılı ekleme sonrası HTTP 201 (Created) döner
 public void add(@RequestBody() @Valid  CreateModelRequest createModelRequest) {
     this.modelService.add(createModelRequest); 
   }

@@ -25,8 +25,9 @@ public class BrandManager  implements BrandService{
 	@Override
 	public List<GetAllBrandsResponse> getAll(){
 		
-		List<Brand> brands = brandRepository.findAll(); 
-			
+		List<Brand> brands = brandRepository.findAll();  
+		
+		// Brand entity'lerini GetAllBrandsResponse DTO'larına dönüştürür	
 		List<GetAllBrandsResponse> brandsResponse = brands.stream()
 				.map(brand->this.modelMapperService.forResponse()
 					   .map(brand,GetAllBrandsResponse.class)).collect(Collectors.toList());
@@ -38,15 +39,13 @@ public class BrandManager  implements BrandService{
 	
 	@Override
 	public void add(CreateBrandRequest createBrandRequest) {
-		
+	    // Aynı isimde marka var mı diye ıs kuralını kontrol et
 		this.brandBusinessRules.checkIfBrandNameExists(createBrandRequest.getName());
 		
-		
+
+        // DTO'dan entity nesnesine dönüşüm yap
 		Brand brand = this.modelMapperService.forRequest()
 				.map(createBrandRequest, Brand.class);
-/* createBrandRequest içindeki verileri Brand sınıfının alanlarına otomatik olarak atar  manuel get/set işlemlerini 
-gereksiz kılar böylece birden fazla nesne olduğunda hepsini tek tek yazmaktan kurtuluruz  
-Map İşlem (veri dönüştürme) */
 				
         this.brandRepository.save(brand);	
 	}
@@ -56,7 +55,8 @@ Map İşlem (veri dönüştürme) */
 	public GetByIdBrandResponse getById(int id) {
     Brand brand = this.brandRepository.findById(id).orElseThrow();
      
-        GetByIdBrandResponse response = this.modelMapperService.forResponse()// modelMapperService ini gelen yanıtı ( response ) islemek için kullanıyoruz
+    // Entity'yi response DTO'ya donustur
+        GetByIdBrandResponse response = this.modelMapperService.forResponse()
         		.map(brand, GetByIdBrandResponse.class);
         
 		return response;
@@ -64,9 +64,10 @@ Map İşlem (veri dönüştürme) */
 
 
 	@Override
-	public void update(UpdateBrandRequest updateBrandRequest) { // dısardan bir UpdateBrandRequest aldık 
-		Brand brand = this.modelMapperService.forRequest() // modelMapperService ini gelen isteği ( request ) islemek için kullanıyoruz
-				.map(updateBrandRequest, Brand.class); //     updateBrandRequest içindeki verileri alıp brand sınıfına nesne( obje ) olusturuyoruz
+	public void update(UpdateBrandRequest updateBrandRequest) { 
+		  // Update ıstegını entity'ye donustur
+		Brand brand = this.modelMapperService.forRequest() 
+				.map(updateBrandRequest, Brand.class); 
 		this.brandRepository.save(brand);
 	}
 
@@ -79,19 +80,17 @@ Map İşlem (veri dönüştürme) */
 	}
 }
 
-// @Service: "Bu bir servis sınıfıdır!" der. Yani, iş mantığını (hesaplama, veri işleme gibi şeyleri) buraya yazarız ve Spring bunu yönetir.
 
-//@Autowired: "Bunu benim yerime otomatik bağlar" der. Başka bir sınıfa ihtiyacın varsa, elle oluşturmadan Spring'in senin yerine onu eklemesini sağlar.
+// @Service: Bu sınıfın bir servis (iş mantığı) sınıfı olduğunu belirtir. İş kuralları ve veri işlemleri burada yapılır, Spring bunu yönetir.
 
-//@Override: Ben bu metodu değiştirdim!" diye Java'ya haber verir. Eski bir metodu alıp içeriğini kendimize göre yeniden yazarız.
+// @Autowired: (Sende yok ama bilmek için) Spring'in ilgili sınıfın örneğini otomatik olarak oluşturup buraya eklemesini sağlar. Elle nesne yaratmaya gerek kalmaz.
 
+// @Override: Bir üst sınıf veya interface'deki metodu geçersiz kıldığını, yani kendi istediğin şekilde yeniden yazdığını belirtir.
 
+// Controller: Kullanıcıdan veya başka uygulamalardan gelen istekleri alır, işler ve yanıt verir.
 
+// DataAccess (Veri Erişim Katmanı): Veritabanı ile doğrudan iletişim kurar. Veri okuma, yazma, güncelleme ve silme işlemlerini yapar.
 
-// controllers ıstegın yapıldıgı yer 
+// Business (İş Katmanı): Uygulamanın iş kurallarını uygular, DataAccess katmanını kullanarak işlemleri gerçekleştirir.
 
-// DataAccess (Veri Erisim Katmanı): Veritabanı işlemlerini yapar, veriyi okur/yazar.
-
-// Business (İş Katmanı): İş kurallarını uygular, DataAccess’i kullanır.
-
-// API (Sunum Katmanı): Kullanıcıya veya diğer uygulamalara hizmet verir, Business katmanını kullanır.
+// API (Sunum Katmanı): Kullanıcıya ya da dış sistemlere hizmet sunan katmandır. Business katmanını kullanarak veri döner veya veri alır.

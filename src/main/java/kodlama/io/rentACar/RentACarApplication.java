@@ -17,8 +17,8 @@ import kodlama.io.rentACar.core.utilities.exceptions.BusinessException;
 import kodlama.io.rentACar.core.utilities.exceptions.ProblemDetails;
 import kodlama.io.rentACar.core.utilities.exceptions.ValidationProblemDetails;
 
-@SpringBootApplication
-@RestControllerAdvice
+@SpringBootApplication   // Spring Boot uygulaması olduğunu belirtir, otomatik konfigürasyonları yapar
+@RestControllerAdvice    // Controller’larda oluşan istisnaları (exception) merkezi olarak yakalamak için
 public class RentACarApplication {
 
 	public static void main(String[] args) {
@@ -27,8 +27,8 @@ public class RentACarApplication {
 	
 	
 	
-	@ExceptionHandler
-	@ResponseStatus(code=HttpStatus.BAD_REQUEST)
+	@ExceptionHandler   // BusinessException türündeki hataları yakalar
+	@ResponseStatus(code=HttpStatus.BAD_REQUEST)  // HTTP 400 döner
 	public ProblemDetails handleBusinessException(BusinessException businessException) {
 		ProblemDetails problemDetails = new ProblemDetails();
 		problemDetails.setMessage(businessException.getMessage());
@@ -38,24 +38,23 @@ public class RentACarApplication {
 	
 
 
-@ExceptionHandler
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+@ExceptionHandler   // Doğrulama hatalarını yakalar (ör: @Valid uyarınca)
+@ResponseStatus(code = HttpStatus.BAD_REQUEST) // HTTP 400 döner
 public ProblemDetails handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException) {
     ValidationProblemDetails validationProblemDetails = new ValidationProblemDetails();
     validationProblemDetails.setMessage("VALIDATION.EXCEPTION");
     validationProblemDetails.setValidationErrors(new HashMap<>());
 
+    // Her bir alan hatasını alıp map’e ekler (alan adı -> hata mesajı)
     for (FieldError fieldError : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
         validationProblemDetails.getValidationErrors().put(fieldError.getField(), fieldError.getDefaultMessage());
     }
     return validationProblemDetails;
 }
 	
-	@Bean
+	@Bean   // Spring konteynerıne ModelMapper nesnesını ekler ıhtiyac halinde otomatik kullanılır
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}  
 }
-
-//@Bean  Spring e bu nesneyi yönetmesini ve ihtiyaç duyulan yerde kullanmasını söyler.
 

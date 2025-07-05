@@ -18,55 +18,32 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ModelManager implements ModelService{
 
-	private ModelRepository modelRepository;        // Veritabanı işlemlerini yapacak nesne
-	private ModelMapperService modelMapperService;  // Entity-DTO dönüşümünü yapacak nesne
-	 // private final BrandRepository brandRepository; 
+	private ModelRepository modelRepository;         // Veritabanı işlemlerini yapacak repository (DAO)
+	private ModelMapperService modelMapperService;   // Entity ve DTO dönüşümlerini yapacak servis
 
 	
 	@Override
 	public List<GetAllModelsResponse> getAll() {
       List<Model> models = modelRepository.findAll(); // Veritabanından tüm Model kayıtlarını getir
 		
-  	// Her bir Model nesnesini GetAllModelsResponse türüne dönüştür
+      // Her bir Model nesnesini GetAllModelsResponse DTO'suna dönüştür
 		  List<GetAllModelsResponse> modelsResponse = models.stream()
 				.map(model->this.modelMapperService
-					   .forResponse() // Dönüştürücü başlat
-				   .map(model,GetAllModelsResponse.class))  // Çevir
-              .collect(Collectors.toList()); //  Listeye çevir
+					   .forResponse()   // Response dönüşümü için mapper'i kullan
+				   .map(model,GetAllModelsResponse.class))   // Model'i DTO'ya çevir
+              .collect(Collectors.toList());   // Stream'deki tüm elemanları listeye çevir
 				
-         // Listeyi döndür
-		 return modelsResponse;
+		 return modelsResponse;  // DTO lıstesını dondur
 	
 	}
 	
-	
-
-	
-	/*
-	@Override
-	public void add(CreateModelRequest createModelRequest) {
-	    // Yeni bir Model nesnesi oluştur
-	    Model model = new Model();
-	    model.setName(createModelRequest.getName());
-
-	    // İlgili brandId’ye sahip Brand’i veritabanından bul
-	    Brand brand = brandRepository.findById(createModelRequest.getBrandId())
-	                                 .orElseThrow(() -> new RuntimeException("Brand bulunamadı"));
-
-	    // Model nesnesine Brand'i set et
-	    model.setBrand(brand);
-
-	    // Veritabanına kaydet
-	    this.modelRepository.save(model);
-	} */
-
-
 	@Override
 	public void add(@RequestBody CreateModelRequest createModelRequest) {
+		// CreateModelRequest DTO'sunu Model entity'sine dönüştür
 	    Model model = this.modelMapperService.forRequest()
 	                  .map(createModelRequest, Model.class);
 
 	    this.modelRepository.save(model);
 	}
 	
-	}
+}

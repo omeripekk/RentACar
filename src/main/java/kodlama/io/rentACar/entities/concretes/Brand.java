@@ -20,11 +20,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor // sıranın bı onemı yok burda ama bunlara ozel
-@Entity
+@NoArgsConstructor // Parametresiz constructor (otomatik oluşturulur - Lombok)
+@Entity // verıtabanındakı tabloyu temsıl eder
 public class Brand {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	 // 1 , 2 , 3 , 4 şeklinde gitmesini sağlar
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	 // ID otomatık 1 , 2 , 3 , 4 seklinde artar
 	@Column(name="id")
 	private int id;
 
@@ -32,17 +32,8 @@ public class Brand {
 	private String name;
 	
 	
-	@OneToMany(mappedBy = "brand") // "Benim birçok alt varlığım var"
-    @JsonManagedReference  // yenı ekldnı
+	@OneToMany(mappedBy = "brand")  // "Benim birçok alt varlığım var"
+    @JsonManagedReference  // JSON serileştirmede sonsuz döngüyü engellemek için kullanılır
 	private List<Model> models;
-	
-	/*
-	 Bu sınıf bir entity'dir.
-	 Veritabanındaki tabloyu temsil eder.
-	*/
-	
-	// @Id Bu alan veritabanındaki primary key'dir.
-	// Yeni bir marka eklendiğinde, id'yi bizim vermemize gerek yok.
-    // Veritabanı id'yi otomatik olarak 1, 2, 3... şeklinde arttırır.
-	
+		
 }

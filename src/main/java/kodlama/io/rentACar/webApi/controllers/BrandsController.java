@@ -28,40 +28,39 @@ public class BrandsController {
   private BrandService brandService;
 
   
-@GetMapping() // data çekmek için kullanılır
+@GetMapping() // Tüm markaları getir
 public List<GetAllBrandsResponse> getAll(){
 	return brandService.getAll();
     }
 
 
-@GetMapping("/{id}") // data çekmek için kullanılır
+@GetMapping("/{id}") // ID'ye gore marka getır
 public GetByIdBrandResponse getById(@PathVariable  int id){
 	return brandService.getById(id);
     } 
 
 
-@PostMapping() // eklemeler için kullanılır
-@ResponseStatus(code=HttpStatus.CREATED)
+@PostMapping() // Yenı marka ekle
+@ResponseStatus(code=HttpStatus.CREATED)  // Başarılı ekleme işlemi sonrası 201 döner
 public void add(@RequestBody() @Valid CreateBrandRequest createBrandRequest) {
     this.brandService.add(createBrandRequest);
   }
 
-@PutMapping // BURDA HATA OLABILIR REQUESTBODY DEN
+@PutMapping // Var olan markayı guncelle
 public void update(@RequestBody() @Valid UpdateBrandRequest updateBrandRequest) {
     this.brandService.update(updateBrandRequest);
    }
 
 
-@DeleteMapping("/{id}") // Bu URL'den gelen id'ye göre silme işlemi yapacağız
+@DeleteMapping("/{id}") // ID'ye gore marka sıl
 public void delete(@PathVariable int id) { // URL'deki id parametresini aldık
 	this.brandService.delete(id); // Aldığımız id'yi brandService'in delete metoduna gönderdik
-	// @PathVariable, URL’den değişken alır, metoda gönderir.
-     }
+	// @PathVariable, URL’den parametre alır, metoda gönderir.
+     } 
 
-} 
+}  
 
 
-// REQUESTBODU() SONRADAN EKLEDIK KALDIRABILIRSIN HATA VERIRSE VIDEOYA GERI DON 5. VIDEO 1.55.00 LERDE FALAN
 // @RestController, bu sınıfın bir REST API denetleyicisi olduğunu Spring'e bildirir. Otomatik olarak @Controller ve @ResponseBody birleşimidir, yani metotlar direkt JSON veya XML döner.
 // @RequestMapping, bir sınıf veya metodu belirli bir URL’ye bağlamak için kullanılır. Genelde sınıf seviyesinde kullanılır ve temel adresi tanımlar (örnek: /api/brands).
 // @GetMapping, HTTP GET isteği ile çalışan bir metodu tanımlar. Tarayıcıdan veri çekmek veya listelemek için kullanılır (örnek: ürünleri listele).

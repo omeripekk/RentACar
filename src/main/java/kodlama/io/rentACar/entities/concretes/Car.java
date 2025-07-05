@@ -19,12 +19,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor // sıranın bı onemı yok burda ama bunlara ozel
-@Entity
+@NoArgsConstructor // Parametresiz constructor (otomatik oluşturulur - Lombok)
+@Entity // verıtabanındakı tabloyu temsıl eder
 public class Car {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	 // 1 , 2 , 3 , 4 şeklinde gitmesini sağlar
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	 // ID degeri 1 , 2 , 3 , 4 şeklinde artar
 	@Column(name="id")
 	private int id;
 	
@@ -41,8 +41,9 @@ public class Car {
 	private int state;  // 1 - Available 2 - Rented 3 - Maintenance
 		
 	@ManyToOne
-	@JoinColumn(name="model_id") // 'model_id' sütunu, Model tablosundaki 'id' sütununa bağlanır bağlanır (foreign key).
-	// Yani her araba (Car), bir modele (Model) aittir.
-	  @JsonBackReference
+	@JoinColumn(name="model_id")  // Bu alan, Model tablosundaki ID ile foreign key ilişkisi kurar
+	@JsonBackReference   // JSON serileştirmede sonsuz döngüyü engellemek için kullanılır
 	private Model model;
 }
+
+

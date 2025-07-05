@@ -20,33 +20,32 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-	@Table(name="models")
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	@NoArgsConstructor // sıranın bı onemı yok burda ama bunlara ozel
-	@Entity
-	public class Model {
+@Table(name="models")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor // Parametresiz constructor (otomatik oluşturulur - Lombok)
+@Entity  // verıtabanındakı tabloyu temsıl eder
+public class Model {
 		
 		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)	 // 1 , 2 , 3 , 4 şeklinde gitmesini sağlar
+		@GeneratedValue(strategy = GenerationType.IDENTITY) // ID degeri 1 , 2 , 3 , 4 şeklinde artar
 		@Column(name="id")
 		private int id;
 
 		@Column(name="name")
 		private String name;
 		
-		   @Version
-		    private int version;
+	    @Version // Optimistic Locking için kullanılır, aynı veriye eş zamanlı erişimlerde çakışmaları önler
+		private int version;
 			
 		
 		@ManyToOne  // 	"Ben bir tane ana varlığa bağlıyım"
-		@JoinColumn(name="brand_id") // Bu sütun, ilişkilendirilen tablodaki id alanına karşılık gelen foreign key’dir.
+		@JoinColumn(name="brand_id") // Bu alan, Brand tablosundaki ID ile foreign key ilişkisindedir
 		private Brand brand;
 		
 		@OneToMany(mappedBy= "model")  // "Benim birçok alt varlığım var"
-		// mappedBy = "model" ifadesi, Car sınıfındaki 'model' alanı ile ilişkiyi belirtir.
-	    @JsonManagedReference // yenı eklendı 
+	    @JsonManagedReference  // JSON serileştirmede sonsuz döngüyü engellemek için kullanılır
 		private List<Car> cars; 
 		
 

@@ -12,5 +12,3 @@ public class UpdateBrandRequest {
     private int id;
 	private String name;
 }
-
-// create yaparken ıd gormeyız bılmeyız ama guncelleme (update) yaparken neyı guncelleyecegımı bılmek gormek ısterım

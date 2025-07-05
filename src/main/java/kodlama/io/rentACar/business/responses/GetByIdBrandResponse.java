@@ -13,6 +13,3 @@ public class GetByIdBrandResponse {
 	private String name;
 }
 
-
-/* BU SINIF BİR DTO (Data Transfer Object) veri taşımak için kullanılan içinde sadece veri olan basit nesnedir.
-Veriyi bir yerden alır başka yere taşır. */

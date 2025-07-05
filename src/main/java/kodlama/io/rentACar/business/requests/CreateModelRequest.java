@@ -22,11 +22,6 @@ public class CreateModelRequest {
 }
 
 
-/* BU SINIF BİR DTO (Data Transfer Object) veri taşımak için kullanılan içinde sadece veri olan basit nesnedir.
-Veriyi bir yerden alır başka yere taşır. */
-
-
-
-//response kullanıcının ıstegı uzerıne gonderılen data   burada bana 250nk ları getırıyor
-//request  kullanıcın istedigi girdigi data mesela sahıbındende 250nk dıye aradım 
-// son kullanıcıdan data alıyorsan request ona bişi veriyorsan response     istek geliypr request   yanıt verıyorsun response  
+// BU SINIF BİR DTO (Data Transfer Object) veri taşımak için kullanılan içinde sadece veri olan basit nesnedir. iş mantığı bulunmaz.
+// Response kullanıcının ıstegı uzerıne gonderılen data ( gonderılen yanıt )
+// Request  kullanıcın istedigi girdigi data  ( gelen istek )

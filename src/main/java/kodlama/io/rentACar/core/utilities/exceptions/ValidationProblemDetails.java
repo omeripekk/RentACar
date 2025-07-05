@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ValidationProblemDetails extends ProblemDetails{
+	// Dogrulama hatalarını hangı alanda ne hata var dıye tutuyor
 	private Map<String, String> validationErrors;
 
 }
